@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Color Converter</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class' };
+        (function () {
+            const stored = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.classList.toggle('dark', stored === 'dark' || (!stored && prefersDark));
+        })();
+    </script>
+</head>
+
+<body class="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+    <!-- NAVBAR -->
+    <nav class="bg-gray-100 dark:bg-gray-900 px-4 py-3 shadow-md flex items-center justify-between">
+        <a href="index.html" class="text-xl font-semibold">MultiTools</a>
+        <ul class="hidden md:flex space-x-6 items-center">
+            <li><a href="calculator.html" class="hover:underline">Calculator</a></li>
+            <li class="relative group">
+                <button class="flex items-center space-x-1 hover:underline">
+                    <span>Data Convert</span>
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M5.5 7.5l4.5 4.5 4.5-4.5H5.5z" />
+                    </svg>
+                </button>
+                <ul
+                    class="absolute left-0 mt-2 bg-white dark:bg-gray-800 shadow-md rounded-md opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all">
+                    <li><a href="base.html" class="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">Base</a>
+                    </li>
+                    <li><a href="unit.html" class="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">Unit</a>
+                    </li>
+                    <li><a href="color.html" class="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">Color</a>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="text.html" class="hover:underline">Text</a></li>
+            <li>
+                <button id="theme-toggle"
+                    class="flex items-center p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700">
+                    <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                            d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M7.05 16.95l-1.414 1.414m12.728 0l-1.414-1.414M7.05 7.05L5.636 5.636M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                    </svg>
+                    <svg id="theme-toggle-dark-icon" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
+                    </svg>
+                </button>
+            </li>
+        </ul>
+        <button id="mobile-menu-btn" class="md:hidden p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+            <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <ul id="mobile-menu" class="hidden bg-gray-100 dark:bg-gray-900 space-y-1 px-4 py-3 md:hidden">
+        <li><a href="calculator.html" class="block hover:underline">Calculator</a></li>
+        <li class="border-t border-gray-200 dark:border-gray-700 pt-2">
+            <span class="block font-medium">Data Convert</span>
+            <ul class="pl-4 mt-1 space-y-1">
+                <li><a href="base.html" class="block hover:underline">Base</a></li>
+                <li><a href="unit.html" class="block hover:underline">Unit</a></li>
+                <li><a href="color.html" class="block hover:underline">Color</a></li>
+            </ul>
+        </li>
+        <li><a href="text.html" class="block hover:underline">Text</a></li>
+        <li>
+            <button id="mobile-theme-toggle"
+                class="w-full text-left flex p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded">
+                <span>Toggle Theme</span>
+            </button>
+        </li>
+    </ul>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-6 py-8">
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+            <h1
+                class="text-3xl font-extrabold text-indigo-600 dark:text-indigo-400 border-b-4 border-indigo-200 dark:border-indigo-600 pb-3 mb-6">
+                Chuyển đổi màu sắc
+            </h1>
+            <p class="text-gray-600 dark:text-gray-300 mb-8">
+                Nhập giá trị HEX, chỉnh RGB(A), HSL(A) hoặc click mẫu bên dưới để xem kết quả và preview.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- HEX -->
+                <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow hover:shadow-xl transition">
+                    <h2 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">HEX</h2>
+                    <input id="hex-input" type="text" placeholder="#RRGGBB or #RRGGBBAA"
+                        class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500" />
+                    <small id="err-hex" class="hidden text-red-500 text-sm mt-1">Hex không hợp lệ.</small>
+                </div>
+
+                <!-- RGB(A) -->
+                <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow hover:shadow-xl transition">
+                    <h2 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">RGB(A)</h2>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm">R (0–255)</label>
+                            <input id="rgb-r" type="number" min="0" max="255"
+                                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500" />
+                        </div>
+                        <div>
+                            <label class="block text-sm">G (0–255)</label>
+                            <input id="rgb-g" type="number" min="0" max="255"
+                                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500" />
+                        </div>
+                        <div>
+                            <label class="block text-sm">B (0–255)</label>
+                            <input id="rgb-b" type="number" min="0" max="255"
+                                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500" />
+                        </div>
+                        <div>
+                            <label class="block text-sm">A (0–1)</label>
+                            <input id="rgb-a" type="number" min="0" max="1" step="0.01" value="1"
+                                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HSL(A) -->
+                <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow hover:shadow-xl transition">
+                    <h2 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">HSL(A)</h2>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm">H (0–360°)</label>
+                            <input id="hsl-h" type="number" min="0" max="360"
+                                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500" />
+                        </div>
+                        <div>
+                            <label class="block text-sm">S (0–100%)</label>
+                            <input id="hsl-s" type="number" min="0" max="100"
+                                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500" />
+                        </div>
+                        <div>
+                            <label class="block text-sm">L (0–100%)</label>
+                            <input id="hsl-l" type="number" min="0" max="100"
+                                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500" />
+                        </div>
+                        <div>
+                            <label class="block text-sm">A (0–1)</label>
+                            <input id="hsl-a" type="number" min="0" max="1" step="0.01" value="1"
+                                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview -->
+                <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow hover:shadow-xl transition flex flex-col">
+                    <h2 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Preview</h2>
+                    <div id="color-preview"
+                        class="w-full h-32 rounded-lg border border-gray-300 dark:border-gray-600 mb-4 bg-white"></div>
+                    <div class="space-y-1 text-sm font-mono text-gray-800 dark:text-gray-200">
+                        <div><strong>HEX:</strong> <span id="preview-hex">–</span></div>
+                        <div><strong>RGBA:</strong> <span id="preview-rgb">–</span></div>
+                        <div><strong>HSLA:</strong> <span id="preview-hsl">–</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Màu mẫu (riêng biệt) -->
+            <div class="mt-8 p-6 bg-gray-100 dark:bg-gray-700 rounded-lg text-gray-700 dark:text-gray-200">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Màu mẫu</h3>
+                <div class="flex flex-wrap justify-center gap-2">
+                    <!-- 24 màu cũ -->
+                    <button data-color="#FF0000"
+                        style="background-color:#FF0000;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Red
+                    </button>
+                    <button data-color="#FFA500"
+                        style="background-color:#FFA500;color:#000;-webkit-text-stroke:0.5px rgba(0,0,0,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Orange
+                    </button>
+                    <button data-color="#FFFF00"
+                        style="background-color:#FFFF00;color:#000;-webkit-text-stroke:0.5px rgba(0,0,0,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Yellow
+                    </button>
+                    <button data-color="#008000"
+                        style="background-color:#008000;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Green
+                    </button>
+                    <button data-color="#0000FF"
+                        style="background-color:#0000FF;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Blue
+                    </button>
+                    <button data-color="#4B0082"
+                        style="background-color:#4B0082;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Indigo
+                    </button>
+                    <button data-color="#EE82EE"
+                        style="background-color:#EE82EE;color:#000;-webkit-text-stroke:0.5px rgba(0,0,0,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Violet
+                    </button>
+                    <button data-color="#FFC0CB"
+                        style="background-color:#FFC0CB;color:#000;-webkit-text-stroke:0.5px rgba(0,0,0,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Pink
+                    </button>
+                    <button data-color="#A52A2A"
+                        style="background-color:#A52A2A;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Brown
+                    </button>
+                    <button data-color="#000000"
+                        style="background-color:#000000;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Black
+                    </button>
+                    <button data-color="#FFFFFF"
+                        style="background-color:#FFFFFF;color:#000;-webkit-text-stroke:0.5px rgba(0,0,0,0.2);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        White
+                    </button>
+                    <button data-color="#808080"
+                        style="background-color:#808080;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Gray
+                    </button>
+                    <button data-color="#00FFFF"
+                        style="background-color:#00FFFF;color:#000;-webkit-text-stroke:0.5px rgba(0,0,0,0.2);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Cyan
+                    </button>
+                    <button data-color="#FF00FF"
+                        style="background-color:#FF00FF;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Magenta
+                    </button>
+                    <button data-color="#00FF00"
+                        style="background-color:#00FF00;color:#000;-webkit-text-stroke:0.5px rgba(0,0,0,0.2);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Lime
+                    </button>
+                    <button data-color="#808000"
+                        style="background-color:#808000;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Olive
+                    </button>
+                    <button data-color="#800000"
+                        style="background-color:#800000;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Maroon
+                    </button>
+                    <button data-color="#000080"
+                        style="background-color:#000080;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Navy
+                    </button>
+                    <button data-color="#008080"
+                        style="background-color:#008080;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Teal
+                    </button>
+                    <button data-color="#C0C0C0"
+                        style="background-color:#C0C0C0;color:#000;-webkit-text-stroke:0.5px rgba(0,0,0,0.2);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Silver
+                    </button>
+                    <button data-color="#FFD700"
+                        style="background-color:#FFD700;color:#000;-webkit-text-stroke:0.5px rgba(0,0,0,0.2);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Gold
+                    </button>
+                    <!-- 21 màu mới -->
+                    <button data-color="#ADD8E6"
+                        style="background-color:#ADD8E6;color:#000;-webkit-text-stroke:0.5px rgba(0,0,0,0.2);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        LightBlue
+                    </button>
+                    <button data-color="#00008B"
+                        style="background-color:#00008B;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        DarkBlue
+                    </button>
+                    <button data-color="#006400"
+                        style="background-color:#006400;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        DarkGreen
+                    </button>
+                    <button data-color="#90EE90"
+                        style="background-color:#90EE90;color:#000;-webkit-text-stroke:0.5px rgba(0,0,0,0.2);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        LightGreen
+                    </button>
+                    <button data-color="#FF69B4"
+                        style="background-color:#FF69B4;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        HotPink
+                    </button>
+                    <button data-color="#FF1493"
+                        style="background-color:#FF1493;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        DeepPink
+                    </button>
+                    <button data-color="#9370DB"
+                        style="background-color:#9370DB;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        MediumPurple
+                    </button>
+                    <button data-color="#9932CC"
+                        style="background-color:#9932CC;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        DarkOrchid
+                    </button>
+                    <button data-color="#F0E68C"
+                        style="background-color:#F0E68C;color:#000;-webkit-text-stroke:0.5px rgba(0,0,0,0.2);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Khaki
+                    </button>
+                    <button data-color="#FFDAB9"
+                        style="background-color:#FFDAB9;color:#000;-webkit-text-stroke:0.5px rgba(0,0,0,0.2);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        PeachPuff
+                    </button>
+                    <button data-color="#FF6347"
+                        style="background-color:#FF6347;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Tomato
+                    </button>
+                    <button data-color="#E9967A"
+                        style="background-color:#E9967A;color:#000;-webkit-text-stroke:0.5px rgba(0,0,0,0.2);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        DarkSalmon
+                    </button>
+                    <button data-color="#F08080"
+                        style="background-color:#F08080;color:#000;-webkit-text-stroke:0.5px rgba(0,0,0,0.2);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        LightCoral
+                    </button>
+                    <button data-color="#2E8B57"
+                        style="background-color:#2E8B57;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        SeaGreen
+                    </button>
+                    <button data-color="#B22222"
+                        style="background-color:#B22222;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        FireBrick
+                    </button>
+                    <button data-color="#8B4513"
+                        style="background-color:#8B4513;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        SaddleBrown
+                    </button>
+                    <button data-color="#CD853F"
+                        style="background-color:#CD853F;color:#fff;-webkit-text-stroke:0.5px rgba(255,255,255,0.5);"
+                        class="w-24 h-10 rounded border-2 border-gray-300 dark:border-gray-600 text-center text-sm flex items-center justify-center">
+                        Peru
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chú thích các hệ màu -->
+            <div class="mt-8 p-6 bg-gray-100 dark:bg-gray-700 rounded-lg text-gray-700 dark:text-gray-200">
+                <h3 class="text-xl font-semibold mb-2">Chú thích các hệ màu</h3>
+                <ul class="list-disc pl-5 space-y-1">
+                    <li><strong>HEX</strong>: #RRGGBB (hex), thêm AA cho alpha.</li>
+                    <li><strong>RGB</strong>: Red/Green/Blue, 0–255.</li>
+                    <li><strong>RGBA</strong>: RGB + alpha (0–1).</li>
+                    <li><strong>HSL</strong>: Hue (0–360°), Saturation & Lightness (%).</li>
+                    <li><strong>HSLA</strong>: HSL + alpha (0–1).</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 dark:bg-gray-800 text-center p-4">
+        Made with ♥ by Minh
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Conversion utils
+        function hexToRgba(h) {
+            let hex = h.replace(/^#/, '');
+            if (![6, 8].includes(hex.length)) return null;
+            const [r, g, b, a] = hex.match(/.{1,2}/g).map(x => parseInt(x, 16));
+            return { r, g, b, a: hex.length === 8 ? +(a / 255).toFixed(2) : 1 };
+        }
+        function rgbaToHex(r, g, b, a = 1) {
+            const to2 = n => n.toString(16).padStart(2, '0');
+            let h = `#${to2(r)}${to2(g)}${to2(b)}`;
+            if (a < 1) h += to2(Math.round(a * 255));
+            return h.toUpperCase();
+        }
+        function rgbToHsl(r, g, b, a = 1) {
+            r /= 255; g /= 255; b /= 255;
+            const mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn;
+            let h = 0, s = 0, l = (mx + mn) / 2;
+            if (d) {
+                h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
+                h = Math.round(h * 60); if (h < 0) h += 360;
+                s = +(d / (1 - Math.abs(2 * l - 1))).toFixed(2) * 100;
+            }
+            return { h, s: Math.round(s), l: Math.round(l * 100), a };
+        }
+        function hslToRgb(h, s, l, a = 1) {
+            s /= 100; l /= 100;
+            const c = (1 - Math.abs(2 * l - 1)) * s, x = c * (1 - Math.abs((h / 60) % 2 - 1)), m = l - c / 2;
+            let [r1, g1, b1] = [0, 0, 0];
+            if (h < 60) [r1, g1, b1] = [c, x, 0];
+            else if (h < 120) [r1, g1, b1] = [x, c, 0];
+            else if (h < 180) [r1, g1, b1] = [0, c, x];
+            else if (h < 240) [r1, g1, b1] = [0, x, c];
+            else if (h < 300) [r1, g1, b1] = [x, 0, c];
+            else[r1, g1, b1] = [c, 0, x];
+            return { r: Math.round((r1 + m) * 255), g: Math.round((g1 + m) * 255), b: Math.round((b1 + m) * 255), a };
+        }
+
+        // Elements
+        const hexEl = document.getElementById('hex-input'),
+            errHex = document.getElementById('err-hex'),
+            rgbEls = ['r', 'g', 'b', 'a'].map(i => document.getElementById(`rgb-${i}`)),
+            hslEls = ['h', 's', 'l', 'a'].map(i => document.getElementById(`hsl-${i}`)),
+            preview = document.getElementById('color-preview'),
+            pHex = document.getElementById('preview-hex'),
+            pRgb = document.getElementById('preview-rgb'),
+            pHsl = document.getElementById('preview-hsl');
+        let lock = false;
+
+        function applyColor({ r, g, b, a }) {
+            const rgba = `rgba(${r},${g},${b},${a})`;
+            preview.style.backgroundColor = rgba;
+            pHex.textContent = rgbaToHex(r, g, b, a);
+            pRgb.textContent = rgba;
+            const hs = rgbToHsl(r, g, b, a);
+            pHsl.textContent = `hsla(${hs.h},${hs.s}%,${hs.l}%,${hs.a})`;
+        }
+
+        function updateFromHex() {
+            const v = hexEl.value.trim();
+            if (!v) { errHex.classList.add('hidden'); return; }
+            const col = hexToRgba(v);
+            if (!col) { errHex.classList.remove('hidden'); return; }
+            errHex.classList.add('hidden');
+            applyColor(col);
+            ['r', 'g', 'b', 'a'].forEach((k, i) => rgbEls[i].value = col[k]);
+            const hs = rgbToHsl(col.r, col.g, col.b, col.a);
+            ['h', 's', 'l', 'a'].forEach((k, i) => hslEls[i].value = hs[k]);
+        }
+        function updateFromRgb() {
+            const [r, g, b, a] = rgbEls.map(el => parseFloat(el.value));
+            if ([r, g, b].some(v => isNaN(v) || v < 0 || v > 255) || isNaN(a) || a < 0 || a > 1) return;
+            const col = { r, g, b, a }, hx = rgbaToHex(r, g, b, a);
+            hexEl.value = hx; errHex.classList.add('hidden');
+            const hs = rgbToHsl(r, g, b, a);
+            ['h', 's', 'l', 'a'].forEach((k, i) => hslEls[i].value = hs[k]);
+            applyColor(col);
+        }
+        function updateFromHsl() {
+            const [h, s, l, a] = hslEls.map(el => parseFloat(el.value));
+            if ([h, s, l].some(v => isNaN(v)) || isNaN(a)) return;
+            const col = hslToRgb(h, s, l, a), hx = rgbaToHex(col.r, col.g, col.b, a);
+            hexEl.value = hx;
+            ['r', 'g', 'b', 'a'].forEach((k, i) => rgbEls[i].value = col[k]);
+            applyColor(col);
+        }
+
+        // Listeners
+        hexEl.addEventListener('input', () => { if (lock) return; lock = true; updateFromHex(); lock = false; });
+        rgbEls.forEach(el => el.addEventListener('input', () => { if (lock) return; lock = true; updateFromRgb(); lock = false; }));
+        hslEls.forEach(el => el.addEventListener('input', () => { if (lock) return; lock = true; updateFromHsl(); lock = false; }));
+
+        // Màu mẫu
+        document.querySelectorAll('[data-color]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                hexEl.value = btn.getAttribute('data-color');
+                updateFromHex();
+            });
+        });
+
+        // Init white
+        hexEl.value = '#FFFFFF'; updateFromHex();
+
+        // Dark/Light mode toggle (desktop)
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const lightIcon = document.getElementById('theme-toggle-light-icon');
+        const darkIcon = document.getElementById('theme-toggle-dark-icon');
+        function updateToggleIcon() {
+            if (document.documentElement.classList.contains('dark')) {
+                darkIcon.classList.add('hidden');
+                lightIcon.classList.remove('hidden');
+            } else {
+                lightIcon.classList.add('hidden');
+                darkIcon.classList.remove('hidden');
+            }
+        }
+        updateToggleIcon();
+        themeToggleBtn.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateToggleIcon();
+        });
+
+        // Dark/Light mode toggle (mobile)
+        document.getElementById('mobile-theme-toggle').addEventListener('click', () => {
+            themeToggleBtn.click();
+        });
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+    </script>
+</body>
+
+</html>

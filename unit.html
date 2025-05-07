@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unit Converter</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind dark mode config
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: {} }
+    };
+    // Init theme on load
+    (function () {
+      const stored = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (stored === 'dark' || (!stored && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+</head>
+
+<body class="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+  <!-- NAVBAR -->
+  <nav class="bg-gray-100 dark:bg-gray-900 px-4 py-3 shadow-md flex items-center justify-between">
+    <a href="index.html" class="text-xl font-semibold">MultiTools</a>
+
+    <!-- Desktop Menu -->
+    <ul class="hidden md:flex space-x-6 items-center">
+      <li><a href="calculator.html" class="hover:underline">Calculator</a></li>
+      <li class="relative group">
+        <button class="flex items-center space-x-1 hover:underline">
+          <span>Data Convert</span>
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M5.5 7.5l4.5 4.5 4.5-4.5H5.5z" />
+          </svg>
+        </button>
+        <ul
+          class="absolute left-0 mt-2 bg-white dark:bg-gray-800 shadow-md rounded-md opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all">
+          <li><a href="base.html" class="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">Base</a></li>
+          <li><a href="unit.html" class="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">Unit</a></li>
+        </ul>
+      </li>
+      <li><a href="text.html" class="hover:underline">Text</a></li>
+      <!-- Dark/Light Toggle -->
+      <li>
+        <button id="theme-toggle"
+          class="flex items-center justify-center p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+          <!-- Sun icon -->
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M7.05 16.95l-1.414 1.414m12.728 0l-1.414-1.414M7.05 7.05L5.636 5.636M12 8a4 4 0 100 8 4 4 0 000-8z" />
+          </svg>
+          <!-- Moon icon -->
+          <svg id="theme-toggle-dark-icon" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
+          </svg>
+        </button>
+      </li>
+    </ul>
+
+    <!-- Mobile Hamburger -->
+    <button id="mobile-menu-btn" class="md:hidden p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+      <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <ul id="mobile-menu" class="hidden bg-gray-100 dark:bg-gray-900 space-y-1 px-4 py-3 md:hidden">
+    <li><a href="calculator.html" class="block hover:underline">Calculator</a></li>
+    <li class="border-t border-gray-200 dark:border-gray-700 pt-2">
+      <span class="block font-medium">Data Convert</span>
+      <ul class="pl-4 mt-1 space-y-1">
+        <li><a href="base.html" class="block hover:underline">Base</a></li>
+        <li><a href="unit.html" class="block hover:underline">Unit</a></li>
+      </ul>
+    </li>
+    <li><a href="text.html" class="block hover:underline">Text</a></li>
+    <li>
+      <button id="mobile-theme-toggle"
+        class="w-full text-left flex items-center space-x-2 p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded">
+        <span>Toggle Theme</span>
+      </button>
+    </li>
+  </ul>
+
+  <!-- Main Content -->
+  <main class="flex-grow container mx-auto px-6 py-8">
+    <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+      <h1
+        class="text-3xl font-extrabold text-indigo-600 dark:text-indigo-400 border-b-4 border-indigo-200 dark:border-indigo-600 pb-3 mb-6">
+        Chuyển đổi đơn vị
+      </h1>
+      <p class="text-gray-600 dark:text-gray-300 mb-8">
+        Chọn loại đơn vị, nhập giá trị và kết quả sẽ tự động cập nhật.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <!-- Length -->
+        <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow hover:shadow-xl transition">
+          <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Chiều dài</h2>
+          <div class="space-y-3">
+            <div>
+              <label for="len-from" class="block text-sm">Từ</label>
+              <select id="len-from"
+                class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500">
+                <option value="meter">Mét</option>
+                <option value="kilometer">Kilômét</option>
+                <option value="mile">Dặm</option>
+                <option value="foot">Bộ̣</option>
+                <option value="inch">Inch</option>
+              </select>
+            </div>
+            <div>
+              <label for="len-value" class="block text-sm">Giá trị</label>
+              <input type="number" id="len-value" placeholder="Nhập số"
+                class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500" />
+            </div>
+            <div>
+              <label for="len-to" class="block text-sm">Đến</label>
+              <select id="len-to"
+                class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500">
+                <option value="meter">Mét</option>
+                <option value="kilometer">Kilômét</option>
+                <option value="mile">Dặm</option>
+                <option value="foot">Bộ̣</option>
+                <option value="inch">Inch</option>
+              </select>
+            </div>
+            <div>
+              <span class="block text-sm">Kết quả:</span>
+              <div id="len-result" class="mt-1 text-xl font-bold text-indigo-600 dark:text-indigo-400">–</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mass -->
+        <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow hover:shadow-xl transition">
+          <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Khối lượng</h2>
+          <div class="space-y-3">
+            <div>
+              <label for="mass-from" class="block text-sm">Từ</label>
+              <select id="mass-from"
+                class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500">
+                <option value="kilogram">Kilôgam</option>
+                <option value="gram">Gam</option>
+                <option value="pound">Pao (lb)</option>
+                <option value="ounce">Ounce</option>
+              </select>
+            </div>
+            <div>
+              <label for="mass-value" class="block text-sm">Giá trị</label>
+              <input type="number" id="mass-value" placeholder="Nhập số"
+                class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500" />
+            </div>
+            <div>
+              <label for="mass-to" class="block text-sm">Đến</label>
+              <select id="mass-to"
+                class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500">
+                <option value="kilogram">Kilôgam</option>
+                <option value="gram">Gam</option>
+                <option value="pound">Pao (lb)</option>
+                <option value="ounce">Ounce</option>
+              </select>
+            </div>
+            <div>
+              <span class="block text-sm">Kết quả:</span>
+              <div id="mass-result" class="mt-1 text-xl font-bold text-indigo-600 dark:text-indigo-400">–</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Temperature -->
+        <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow hover:shadow-xl transition">
+          <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Nhiệt độ</h2>
+          <div class="space-y-3">
+            <div>
+              <label for="temp-from" class="block text-sm">Từ</label>
+              <select id="temp-from"
+                class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500">
+                <option value="C">°C</option>
+                <option value="F">°F</option>
+                <option value="K">K</option>
+              </select>
+            </div>
+            <div>
+              <label for="temp-value" class="block text-sm">Giá trị</label>
+              <input type="number" id="temp-value" placeholder="Nhập số"
+                class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500" />
+            </div>
+            <div>
+              <label for="temp-to" class="block text-sm">Đến</label>
+              <select id="temp-to"
+                class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500">
+                <option value="C">°C</option>
+                <option value="F">°F</option>
+                <option value="K">K</option>
+              </select>
+            </div>
+            <div>
+              <span class="block text-sm">Kết quả:</span>
+              <div id="temp-result" class="mt-1 text-xl font-bold text-indigo-600 dark:text-indigo-400">–</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chú thích đơn vị -->
+      <div class="mt-8 p-6 bg-gray-100 dark:bg-gray-700 rounded-lg text-gray-700 dark:text-gray-200 space-y-2">
+        <h3 class="text-xl font-semibold mb-2">Chú thích các đơn vị</h3>
+        <ul class="list-disc pl-5">
+          <li><strong>Mét (meter, m)</strong>: đơn vị đo chiều dài cơ bản trong hệ SI.</li>
+          <li><strong>Kilômét (kilometer, km)</strong>: 1 km = 1 000 m.</li>
+          <li><strong>Dặm (mile, mi)</strong>: 1 mi ≈ 1 609,34 m.</li>
+          <li><strong>Bộ̣ (foot, ft)</strong>: 1 ft ≈ 0,3048 m.</li>
+          <li><strong>Inch (in)</strong>: 1 in = 2,54 cm.</li>
+          <li><strong>Kilôgam (kilogram, kg)</strong>: đơn vị khối lượng trong hệ SI.</li>
+          <li><strong>Gam (gram, g)</strong>: 1 g = 0,001 kg.</li>
+          <li><strong>Pao (pound, lb)</strong>: 1 lb ≈ 0,453592 kg.</li>
+          <li><strong>Ounce (oz)</strong>: 1 oz ≈ 28,35 g.</li>
+          <li><strong>Độ C (Celsius, °C)</strong>: 0 °C = 273,15 K.</li>
+          <li><strong>Độ F (Fahrenheit, °F)</strong>: 32 °F = 0 °C.</li>
+          <li><strong>Kelvin (K)</strong>: đơn vị nhiệt độ tuyệt đối, 0 K = −273,15 °C.</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-100 dark:bg-gray-800 text-center p-4">
+    Made with &hearts; by Minh
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Dark/Light mode toggle (desktop)
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const lightIcon = document.getElementById('theme-toggle-light-icon');
+    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+    function updateToggleIcon() {
+      if (document.documentElement.classList.contains('dark')) {
+        darkIcon.classList.add('hidden');
+        lightIcon.classList.remove('hidden');
+      } else {
+        lightIcon.classList.add('hidden');
+        darkIcon.classList.remove('hidden');
+      }
+    }
+    updateToggleIcon();
+    themeToggleBtn.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      updateToggleIcon();
+    });
+
+    // Dark/Light mode toggle (mobile)
+    document.getElementById('mobile-theme-toggle').addEventListener('click', () => {
+      themeToggleBtn.click();
+    });
+
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    // ---- LENGTH & MASS ----
+    const lenFactors = { meter: 1, kilometer: 1000, mile: 1609.34, foot: 0.3048, inch: 0.0254 };
+    const massFactors = { kilogram: 1, gram: 0.001, pound: 0.453592, ounce: 0.0283495 };
+    function bindSimpleConv(type, factors) {
+      const from = document.getElementById(`${type}-from`);
+      const to = document.getElementById(`${type}-to`);
+      const val = document.getElementById(`${type}-value`);
+      const res = document.getElementById(`${type}-result`);
+      function calc() {
+        const v = parseFloat(val.value);
+        if (isNaN(v)) { res.textContent = '–'; return; }
+        const out = v * factors[from.value] / factors[to.value];
+        res.textContent = +out.toFixed(6);
+      }
+      [from, to, val].forEach(el => el.addEventListener('input', calc));
+    }
+    bindSimpleConv('len', lenFactors);
+    bindSimpleConv('mass', massFactors);
+
+    // ---- TEMPERATURE ----
+    const tFrom = document.getElementById('temp-from');
+    const tTo = document.getElementById('temp-to');
+    const tVal = document.getElementById('temp-value');
+    const tRes = document.getElementById('temp-result');
+    function calcTemp() {
+      let v = parseFloat(tVal.value);
+      if (isNaN(v)) { tRes.textContent = '–'; return; }
+      const f = tFrom.value, t = tTo.value;
+      let out;
+      if (f === t) out = v;
+      else if (f === 'C' && t === 'F') out = v * 9 / 5 + 32;
+      else if (f === 'C' && t === 'K') out = v + 273.15;
+      else if (f === 'F' && t === 'C') out = (v - 32) * 5 / 9;
+      else if (f === 'F' && t === 'K') out = (v - 32) * 5 / 9 + 273.15;
+      else if (f === 'K' && t === 'C') out = v - 273.15;
+      else if (f === 'K' && t === 'F') out = (v - 273.15) * 9 / 5 + 32;
+      tRes.textContent = +out.toFixed(2);
+    }
+    [tFrom, tTo, tVal].forEach(el => el.addEventListener('input', calcTemp));
+  </script>
+</body>
+
+</html>

@@ -34,37 +34,16 @@
         <div class="container mx-auto px-4 md:px-8 flex items-center justify-between h-16">
             <a href="index.html" class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">MultiTools</a>
             <ul class="hidden md:flex items-center space-x-6">
-                <li><a href="index.html"
-                        class="text-gray-700 dark:text-gray-300 font-medium hover:text-indigo-600 dark:hover:text-indigo-400">Home</a>
-                </li>
-                <li><a href="calculator.html" class="hover:underline">Calculator</a></li>
-                <li class="relative group">
-                    <button class="flex items-center space-x-1 hover:underline">
-                        <span>Data Convert</span>
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M5.5 7.5l4.5 4.5 4.5-4.5H5.5z" />
-                        </svg>
-                    </button>
-                    <ul
-                        class="absolute left-0 mt-2 w-32 bg-white dark:bg-gray-800 shadow-md rounded-md opacity-0 group-hover:opacity-100 invisible group-hover:visible transition">
-                        <li><a href="base.html"
-                                class="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">Base</a></li>
-                        <li><a href="unit.html"
-                                class="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">Unit</a></li>
-                        <li><a href="color.html"
-                                class="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">Color</a></li>
-                    </ul>
-                </li>
-                <li><a href="text.html" class="hover:underline">Text</a></li>
+                <div id="menu-placeholder"></div>
                 <li>
                     <button id="theme-toggle"
                         class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700">
-                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" xmlns="http://www.w3.org/2000/svg"
+                        <svg class="hidden w-5 h-5 theme-toggle-light-ICON" xmlns="http://www.w3.org/2000/svg"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M7.05 16.95l-1.414 1.414m12.728 0l-1.414-1.414M7.05 7.05L5.636 5.636M12 8a4 4 0 100 8 4 4 0 000-8z" />
                         </svg>
-                        <svg id="theme-toggle-dark-icon" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        <svg class="w-5 h-5 theme-toggle-dark-ICON" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
@@ -82,28 +61,19 @@
         </div>
         <!-- Mobile Menu -->
         <ul id="mobile-menu" class="hidden md:hidden bg-gray-100 dark:bg-gray-900 space-y-1 px-4 py-3">
-            <li><a href="index.html" class="block font-medium hover:underline">Home</a></li>
-            <li><a href="calculator.html" class="block hover:underline">Calculator</a></li>
-            <li>
-                <span class="block font-medium mt-2">Data Convert</span>
-                <ul class="pl-4 mt-1 space-y-1">
-                    <li><a href="base.html" class="block hover:underline">Base</a></li>
-                    <li><a href="unit.html" class="block hover:underline">Unit</a></li>
-                    <li><a href="color.html" class="block hover:underline">Color</a></li>
-                </ul>
-            </li>
-            <li><a href="text.html" class="block hover:underline">Text</a></li>
+            <div id="menu-mobile-placeholder"></div>
             <li>
                 <button id="mobile-theme-toggle"
                     class="flex items-center p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700">
-                    <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" xmlns="http://www.w3.org/2000/svg"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path
+                    <svg class="hidden w-5 h-5 theme-toggle-light-ICON" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M7.05 16.95l-1.414 1.414m12.728 0l-1.414-1.414M7.05 7.05L5.636 5.636M12 8a4 4 0 100 8 4 4 0 000-8z" />
                     </svg>
-                    <svg id="theme-toggle-dark-icon" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    <svg class="w-5 h-5 theme-toggle-dark-ICON" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
-                        <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
                     </svg>
                 </button>
             </li>
@@ -182,41 +152,12 @@
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-100 dark:bg-gray-800 text-center p-4">
-        Made with &hearts; by Minh
-    </footer>
+    <!-- FOOTER -->
+    <div id="footer-placeholder"></div>
 
     <!-- Scripts -->
+    <script type="module" src="../js/common.js"></script>
     <script>
-        // Dark/Light mode toggle
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const lightIcon = document.getElementById('theme-toggle-light-icon');
-        const darkIcon = document.getElementById('theme-toggle-dark-icon');
-
-        // Update icon visibility
-        function updateToggleIcon() {
-            if (document.documentElement.classList.contains('dark')) {
-                darkIcon.classList.add('hidden');
-                lightIcon.classList.remove('hidden');
-            } else {
-                lightIcon.classList.add('hidden');
-                darkIcon.classList.remove('hidden');
-            }
-        }
-        updateToggleIcon();
-
-        themeToggleBtn.addEventListener('click', () => {
-            const isDark = document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            updateToggleIcon();
-        });
-
-        // Mobile menu toggle
-        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        });
-
         // Conversion + validation
         const inputs = document.querySelectorAll('input[data-base]');
         const regexMap = {

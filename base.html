@@ -1,0 +1,224 @@
+<!DOCTYPE html> 
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Base Converter</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind dark mode config
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {},
+      }
+    };
+    // Init theme on load
+    (function () {
+      const stored = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (stored === 'dark' || (!stored && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+</head>
+
+<body class="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+  <!-- NAVBAR -->
+  <nav class="bg-gray-100 dark:bg-gray-900 px-4 py-3 shadow-md flex items-center justify-between">
+    <!-- Logo / Brand -->
+    <a href="index.html" class="text-xl font-semibold">MultiTools</a>
+
+    <!-- Desktop Menu -->
+    <ul class="hidden md:flex space-x-6 items-center">
+      <li><a href="calculator.html" class="hover:underline">Calculator</a></li>
+      <li class="relative group">
+        <button class="flex items-center space-x-1 hover:underline">
+          <span>Data Convert</span>
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M5.5 7.5l4.5 4.5 4.5-4.5H5.5z" />
+          </svg>
+        </button>
+        <ul
+          class="absolute left-0 mt-2 bg-white dark:bg-gray-800 shadow-md rounded-md opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all">
+          <li><a href="base.html" class="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">Base</a></li>
+          <li><a href="unit.html" class="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">Unit</a></li>
+        </ul>
+      </li>
+      <li><a href="text.html" class="hover:underline">Text</a></li>
+      <!-- Dark/Light Toggle -->
+      <li>
+        <button id="theme-toggle"
+          class="flex items-center justify-center p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+          <!-- Sun icon -->
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M7.05 16.95l-1.414 1.414m12.728 0l-1.414-1.414M7.05 7.05L5.636 5.636M12 8a4 4 0 100 8 4 4 0 000-8z" />
+          </svg>
+          <!-- Moon icon -->
+          <svg id="theme-toggle-dark-icon" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
+          </svg>
+        </button>
+      </li>
+    </ul>
+
+    <!-- Mobile Hamburger -->
+    <button id="mobile-menu-btn" class="md:hidden p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+      <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-grow container mx-auto px-6 py-8">
+    <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+      <h1
+        class="text-3xl font-extrabold text-indigo-600 dark:text-indigo-400 border-b-4 border-indigo-200 dark:border-indigo-600 pb-3 mb-6">
+        Chuyển đổi hệ cơ số
+      </h1>
+      <p class="text-gray-600 dark:text-gray-300 mb-8">
+        Nhập giá trị hợp lệ vào một ô bên dưới (ví dụ: nhị phân chỉ 0 hoặc 1, thập lục phân 0–9/A–F). Kết quả ở các ô khác
+        sẽ tự động hiện.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Binary -->
+        <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow hover:shadow-xl transition">
+          <label for="bin" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+            Binary (2)
+          </label>
+          <input id="bin" type="text" data-base="2" pattern="[0-1]*"
+            class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            placeholder="Nhập nhị phân" />
+          <small id="err-bin" class="hidden text-red-500 text-sm mt-1 block">Chỉ nhập 0 hoặc 1.</small>
+        </div>
+
+        <!-- Decimal -->
+        <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow hover:shadow-xl transition">
+          <label for="dec" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+            Decimal (10)
+          </label>
+          <input id="dec" type="text" data-base="10" pattern="[0-9]*"
+            class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            placeholder="Nhập thập phân" />
+          <small id="err-dec" class="hidden text-red-500 text-sm mt-1 block">Chỉ nhập chữ số 0–9.</small>
+        </div>
+
+        <!-- Hexadecimal -->
+        <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow hover:shadow-xl transition">
+          <label for="hex" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+            Hexadecimal (16)
+          </label>
+          <input id="hex" type="text" data-base="16" pattern="[0-9A-Fa-f]*"
+            class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            placeholder="Nhập thập lục phân" />
+          <small id="err-hex" class="hidden text-red-500 text-sm mt-1 block">Chỉ nhập 0–9 và A–F.</small>
+        </div>
+
+        <!-- Octal -->
+        <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow hover:shadow-xl transition">
+          <label for="oct" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+            Octal (8)
+          </label>
+          <input id="oct" type="text" data-base="8" pattern="[0-7]*"
+            class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            placeholder="Nhập bát phân" />
+          <small id="err-oct" class="hidden text-red-500 text-sm mt-1 block">Chỉ nhập 0–7.</small>
+        </div>
+      </div>
+
+      <!-- Chú thích các hệ cơ số -->
+      <div class="mt-8 p-6 bg-gray-100 dark:bg-gray-700 rounded-lg text-gray-700 dark:text-gray-200 space-y-2">
+        <h3 class="text-xl font-semibold mb-2">Chú thích các hệ cơ số</h3>
+        <ul class="list-disc pl-5">
+          <li><strong>Nhị phân (binary, base-2)</strong>: chỉ dùng chữ số 0 và 1.</li>
+          <li><strong>Thập phân (decimal, base-10)</strong>: hệ số đếm thông dụng, dùng 0–9.</li>
+          <li><strong>Thập lục phân (hexadecimal, base-16)</strong>: dùng 0–9 và A–F (A=10,…,F=15).</li>
+          <li><strong>Bát phân (octal, base-8)</strong>: dùng các chữ số 0–7.</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-100 dark:bg-gray-800 text-center p-4">
+    Made with &hearts; by Minh
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Dark/Light mode toggle
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const lightIcon = document.getElementById('theme-toggle-light-icon');
+    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+
+    // Update icon visibility
+    function updateToggleIcon() {
+      if (document.documentElement.classList.contains('dark')) {
+        darkIcon.classList.add('hidden');
+        lightIcon.classList.remove('hidden');
+      } else {
+        lightIcon.classList.add('hidden');
+        darkIcon.classList.remove('hidden');
+      }
+    }
+    updateToggleIcon();
+
+    themeToggleBtn.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      updateToggleIcon();
+    });
+
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    // Conversion + validation
+    const inputs = document.querySelectorAll('input[data-base]');
+    const regexMap = {
+      2: /^[0-1]+$/,
+      10: /^[0-9]+$/,
+      16: /^[0-9A-Fa-f]+$/,
+      8: /^[0-7]+$/
+    };
+    let lock = false;
+    inputs.forEach(input => {
+      input.addEventListener('input', () => {
+        if (lock) return;
+        lock = true;
+        const base = +input.dataset.base;
+        const val = input.value.trim();
+        // hide all errors
+        inputs.forEach(i => document.getElementById('err-' + i.id).classList.add('hidden'));
+        inputs.forEach(i => i.classList.remove('border-red-500'));
+        if (!val) {
+          inputs.forEach(i => { if (i !== input) i.value = ''; });
+        } else if (!regexMap[base].test(val)) {
+          input.classList.add('border-red-500');
+          document.getElementById('err-' + input.id).classList.remove('hidden');
+          inputs.forEach(i => { if (i !== input) i.value = ''; });
+        } else {
+          const num = parseInt(val, base);
+          inputs.forEach(i => {
+            if (i !== input) i.value = num.toString(+i.dataset.base).toUpperCase();
+          });
+        }
+        lock = false;
+      });
+    });
+  </script>
+</body>
+
+</html>

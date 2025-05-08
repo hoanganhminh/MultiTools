@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Encode/Decode Converters</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: {} }
+        };
+        (function () {
+            const stored = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (stored === 'dark' || (!stored && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
+</head>
+
+<body class="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 flex flex-col min-h-screen">
+    <!-- NAVBAR -->
+    <nav class="bg-gray-100 dark:bg-gray-900 shadow-md">
+        <div class="container mx-auto px-4 md:px-8 flex items-center justify-between h-16">
+            <a href="index.html" class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">MultiTools</a>
+            <ul class="hidden md:flex items-center space-x-6">
+                <div id="menu-placeholder"></div>
+                <li>
+                    <button id="theme-toggle"
+                        class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <svg class="hidden w-5 h-5 theme-toggle-light-ICON" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M7.05 16.95l-1.414 1.414m12.728 0l-1.414-1.414M7.05 7.05L5.636 5.636M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                        </svg>
+                        <svg class="w-5 h-5 theme-toggle-dark-ICON" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
+                        </svg>
+                    </button>
+                </li>
+            </ul>
+            <!-- Mobile Hamburger -->
+            <button id="mobile-menu-btn" class="md:hidden p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+                <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <ul id="mobile-menu" class="hidden md:hidden bg-gray-100 dark:bg-gray-900 space-y-1 px-4 py-3">
+            <div id="menu-mobile-placeholder"></div>
+            <li>
+                <button id="mobile-theme-toggle"
+                    class="flex items-center p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700">
+                    <svg class="hidden w-5 h-5 theme-toggle-light-ICON" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M7.05 16.95l-1.414 1.414m12.728 0l-1.414-1.414M7.05 7.05L5.636 5.636M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                    </svg>
+                    <svg class="w-5 h-5 theme-toggle-dark-ICON" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
+                    </svg>
+                </button>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="flex-grow container mx-auto px-6 py-8">
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+            <h1
+                class="text-3xl font-extrabold text-indigo-600 dark:text-indigo-400 border-b-4 border-indigo-200 dark:border-indigo-600 pb-3 mb-6">
+                Mã hóa / Giải mã
+            </h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- INPUT -->
+                <div>
+                    <label for="inputText" class="block text-sm font-medium mb-2">Nhập văn bản</label>
+                    <textarea id="inputText" rows="8"
+                        class="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        placeholder="Nhập văn bản cần mã hóa hoặc giải mã..."></textarea>
+                </div>
+
+                <!-- OUTPUT -->
+                <div>
+                    <label for="outputText" class="block text-sm font-medium mb-2">Kết quả</label>
+                    <textarea id="outputText" rows="8" readonly
+                        class="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none"></textarea>
+                </div>
+            </div>
+
+            <!-- TÙY CHỌN -->
+            <div class="mt-6 flex flex-col sm:flex-row sm:items-center gap-4">
+                <select id="mode"
+                    class="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="b64-encode">Base64 Encode</option>
+                    <option value="b64-decode">Base64 Decode</option>
+                    <option value="url-encode">URL Encode</option>
+                    <option value="url-decode">URL Decode</option>
+                </select>
+                <button id="processBtn"
+                    class="px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition font-semibold">Thực
+                    hiện</button>
+            </div>
+
+            <!-- ERROR -->
+            <p id="errorText" class="text-red-500 mt-4 hidden"></p>
+
+            <!-- Chú thích về Mã hóa/Giải mã -->
+            <div class="mt-8 p-6 bg-gray-100 dark:bg-gray-700 rounded-lg text-gray-700 dark:text-gray-200 space-y-2">
+                <h3 class="text-xl font-semibold mb-2">Chú thích về Mã hóa/Giải mã</h3>
+                <ul class="list-disc pl-5 space-y-1">
+                    <li>
+                        <strong>Base64 Encode</strong>: Chuyển đổi dữ liệu nhị phân (chuỗi, tệp tin nhỏ) thành chuỗi văn
+                        bản
+                        chỉ gồm 64 ký tự A–Z, a–z, 0–9, +, /, giúp dễ truyền tải qua mạng.
+                    </li>
+                    <li>
+                        <strong>Base64 Decode</strong>: Giải mã chuỗi Base64 trở về dạng nhị phân gốc (ký tự, dữ liệu).
+                    </li>
+                    <li>
+                        <strong>URL Encode</strong>: Thay thế ký tự đặc biệt trong URL (khoảng trắng, ký tự không ASCII)
+                        thành dạng `%XX` để đảm bảo an toàn khi truyền qua HTTP.
+                    </li>
+                    <li>
+                        <strong>URL Decode</strong>: Chuyển các mã `%XX` trở về ký tự gốc, giúp đọc hiểu đường dẫn và
+                        tham
+                        số dễ dàng.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script type="module" src="../js/common.js"></script>
+    <script>
+        const input = document.getElementById('inputText');
+        const output = document.getElementById('outputText');
+        const mode = document.getElementById('mode');
+        const btn = document.getElementById('processBtn');
+        const errorText = document.getElementById('errorText');
+
+        btn.addEventListener('click', () => {
+            const val = input.value.trim();
+            const selected = mode.value;
+            errorText.classList.add('hidden');
+            output.value = '';
+
+            try {
+                let result = '';
+                if (selected === 'b64-encode') {
+                    result = btoa(unescape(encodeURIComponent(val)));
+                } else if (selected === 'b64-decode') {
+                    result = decodeURIComponent(escape(atob(val)));
+                } else if (selected === 'url-encode') {
+                    result = encodeURIComponent(val);
+                } else if (selected === 'url-decode') {
+                    result = decodeURIComponent(val);
+                }
+                output.value = result;
+            } catch (e) {
+                errorText.textContent = 'Lỗi xử lý dữ liệu. Có thể đầu vào không hợp lệ.';
+                errorText.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+
+</html>
